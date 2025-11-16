@@ -1,9 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth import login, authenticate, logout
+from django.contrib import messages
+from .forms import SignUpForm, LoginForm, PostForm
 from django.views import View
 from django.urls import reverse_lazy
 from django.views.generic import ListView,DetailView,CreateView, UpdateView, DeleteView
 from .models import Post
-from .forms import PostForm
 from django.contrib.auth.forms import UserCreationForm
 from django.views.generic import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
@@ -51,7 +53,43 @@ class DeletePostView(LoginRequiredMixin, UserPassesTestMixin,DeleteView):
         post = self.get_object()
         return self.request.user == post.author
 
-class SignUpView(CreateView):
-    form_class = UserCreationForm
-    template_name = "blog/signup.html"
-    success_url = reverse_lazy('login')
+
+
+            # ------------Login/Signin-----------------#
+
+
+def signup_view(request):
+    if request.method == "POST":
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            messages.success(request, "✅ Account created successfully!")
+            login(request, user)
+            return redirect("list_post")
+        else:
+            messages.error(request, "⚠️ Please correct the errors below.")
+    else:
+        form = SignUpForm()
+    return render(request, "blog/signup.html", {"form": form})
+
+
+def login_view(request):
+    if request.method == "POST":
+        form = LoginForm(request=request, data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            messages.success(request, "🎉 Logged in successfully!")
+            return redirect("list_post")
+        else:
+            messages.error(request, "❌ Invalid credentials.")
+    else:
+        form = LoginForm()
+    return render(request, "blog/login.html", {"form": form})
+
+
+def logout_view(request):
+    logout(request)
+    messages.info(request, "👋 Logged out successfully.")
+    return redirect("login")
+
