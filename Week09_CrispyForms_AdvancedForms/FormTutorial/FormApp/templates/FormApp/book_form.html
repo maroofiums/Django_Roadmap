@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}{% if object %}Update{% else %}Create{% endif %} Book{% endblock %}
+
+{% block content %}
+<h1>{% if object %}Update{% else %}Create{% endif %} Book</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button type="submit" class="btn btn-success">Save</button>
+    <a class="btn btn-secondary" href="{% url 'book-list' %}">Cancel</a>
+</form>
+{% endblock %}
