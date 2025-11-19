@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}{{ object.title }}{% endblock %}
+
+{% block content %}
+<h1>{{ object.title }}</h1>
+<p><strong>Author:</strong> {{ object.author }}</p>
+<p><strong>Published Date:</strong> {{ object.published_date }}</p>
+
+{% if user == object.owner %}
+    <a class="btn btn-warning" href="{% url 'book_update' object.pk %}">Edit</a>
+    <a class="btn btn-danger" href="{% url 'book_delete' object.pk %}">Delete</a>
+{% endif %}
+
+<a class="btn btn-secondary" href="{% url 'book_list' %}">Back to list</a>
+{% endblock %}

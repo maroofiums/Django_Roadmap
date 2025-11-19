@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class FormappConfig(AppConfig):
+class BookFormConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'FormApp'
+    name = 'book_form'
