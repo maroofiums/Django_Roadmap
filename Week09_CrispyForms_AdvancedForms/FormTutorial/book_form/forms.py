@@ -2,8 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Row, Column, Div, Submit, Field
-
+from book_form.crispy_components.reusable import FormField, CardLayout, PrimarySubmit
 from .models import Book
 
 
@@ -23,15 +22,12 @@ class SignupForm(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.form_method = "post"
 
-        self.helper.layout = Layout(
-            Div(
-                Field("username", placeholder="Enter username"),
-                Field("email", placeholder="Enter email"),
-                Field("password", placeholder="Enter password"),
-                Field("confirm_password", placeholder="Confirm password"),
-                css_class="card p-4 shadow"
-            ),
-            Submit("submit", "Sign Up", css_class="btn btn-primary w-100 mt-3"),
+        self.helper.layout = CardLayout(
+            FormField("username", placeholder="Enter username"),
+            FormField("email", placeholder="Enter email"),
+            FormField("password", placeholder="Enter password"),
+            FormField("confirm_password", placeholder="Confirm password"),
+            PrimarySubmit("Sign Up")
         )
 
     def clean(self):
@@ -57,10 +53,10 @@ class LoginForm(AuthenticationForm):
         self.helper = FormHelper()
         self.helper.form_method = "post"
 
-        self.helper.layout = Layout(
-            Field("username", placeholder="Username"),
-            Field("password", placeholder="Password"),
-            Submit("submit", "Login", css_class="btn btn-success w-100 mt-3"),
+        self.helper.layout = CardLayout(
+            FormField("username", placeholder="Username"),
+            FormField("password", placeholder="Password"),
+            PrimarySubmit("Login")
         )
 
 
@@ -70,20 +66,15 @@ class LoginForm(AuthenticationForm):
 class BookForm(forms.ModelForm):
     class Meta:
         model = Book
-        fields = ["title", "author"]  # exclude published_date
-        # published_date will be auto set
+        fields = ["title", "author"]  # published_date auto set
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
         self.helper = FormHelper()
         self.helper.form_method = "post"
 
-        self.helper.layout = Layout(
-            Div(
-                Row(Column("title", css_class="form-floating mb-3")),
-                Row(Column("author", css_class="form-floating mb-3")),
-                css_class="card p-4 shadow"
-            ),
-            Submit("submit", "Save Book", css_class="btn btn-primary w-100 mt-3"),
+        self.helper.layout = CardLayout(
+            FormField("title", placeholder="Book Title"),
+            FormField("author", placeholder="Author Name"),
+            PrimarySubmit("Save Book")
         )

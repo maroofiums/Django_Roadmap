@@ -1,0 +1,6 @@
+{% load crispy_forms_tags %}
+{% load crispy_extras %}
+
+<div class="mb-3 {{ css_class }}">
+    {{ form|get_item:field_name|as_crispy_field }}
+</div>
