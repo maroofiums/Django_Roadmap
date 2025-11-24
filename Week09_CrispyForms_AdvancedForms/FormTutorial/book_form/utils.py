@@ -6,7 +6,6 @@ import random
 
 fake = Faker()
 
-
 def create_fake_user(count=1):
     users = []
     for _ in range(count):
@@ -23,9 +22,6 @@ def create_fake_user(count=1):
 
 
 def create_fake_books(count=1, owners=None):
-    """
-    owners: list of User objects to assign ownership
-    """
     books = []
     if owners is None:
         owners = list(User.objects.all())

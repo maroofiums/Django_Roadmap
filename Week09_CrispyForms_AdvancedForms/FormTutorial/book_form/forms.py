@@ -6,9 +6,6 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Div, Row, Column, Submit, Field
 
 class FormField:
-    """
-    Reusable crispy field wrapper
-    """
     def __init__(self, field_name, css_class=""):
         self.field_name = field_name
         self.css_class = css_class

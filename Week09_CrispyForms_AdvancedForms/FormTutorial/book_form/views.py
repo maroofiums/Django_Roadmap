@@ -3,14 +3,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.views import LoginView as DjangoLoginView, LogoutView as DjangoLogoutView
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, FormView
-
 from .models import Book
 from .forms import BookForm, LoginForm, SignupForm
 
-
-# -------------------------
-# BOOK VIEWS
-# -------------------------
 
 class BookListView(ListView):
     model = Book
@@ -52,10 +47,6 @@ class BookDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         return self.get_object().owner == self.request.user
 
-
-# -------------------------
-# AUTH VIEWS
-# -------------------------
 
 class SignUpView(FormView):
     template_name = "FormApp/signup.html"
