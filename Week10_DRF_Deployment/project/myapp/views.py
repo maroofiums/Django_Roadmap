@@ -21,3 +21,26 @@ class PostDetailAPIView(APIView):
             return Response({"error":"Post Not Found"},status=status.HTTP_404_NOT_FOUND)
         serializer = PostSerializer(post)
         return Response(serializer.data)
+
+class PostCreateAPI(APIView):
+    def post(self, request):
+        serializer = PostSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
+
+class PostUpdateAPI(APIView):
+    def put(self, request, pk):
+        post = Post.objects.get(pk=pk)
+        serializer = PostSerializer(post, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+
+class PostDeleteAPI(APIView):
+    def delete(self, request, pk):
+        post = Post.objects.get(pk=pk)
+        post.delete()
+        return Response({"message": "deleted"})
