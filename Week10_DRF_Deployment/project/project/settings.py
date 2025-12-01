@@ -37,10 +37,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'myapp',
-    'rest_framework',
-    'rest_framework.authtoken',
 ]
+
+EXTERNAL_APPS = [
+    'myapp',
+    'rest_framework.authtoken',
+    'rest_framework',
+]
+
+INSTALLED_APPS += EXTERNAL_APPS
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
