@@ -1,0 +1,12 @@
+{% load cache %}
+
+{% cache 300 recent_posts %}
+    <div class="card p-3 shadow-sm">
+        <h4>Recent Posts</h4>
+        <ul>
+            {% for post in recent_posts %}
+                <li>{{ post.title }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endcache %}
