@@ -1,0 +1,9 @@
+{% load cache %}
+
+<div class="sidebar">
+    {% cache 20 recent_posts %}
+        {% for post in recent_posts %}
+            <p>{{ post.title }}</p>
+        {% endfor %}
+    {% endcache %}
+</div>
