@@ -8,7 +8,10 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
     
+from django.contrib.auth.models import User
+
 class Post(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)  # <-- Add this
     title = models.CharField(max_length=100)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
