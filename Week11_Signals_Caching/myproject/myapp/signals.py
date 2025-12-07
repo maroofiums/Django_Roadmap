@@ -1,26 +1,17 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import User
+from .models import Profile
 
-from .models import Profile, Post
-
-
+# Automatically create Profile for every new User
 @receiver(post_save, sender=User)
 def create_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
-        print("Profile Auto Created!")
+        print("✅ Profile Auto Created!")
 
-
+# Automatically save Profile when User is saved
 @receiver(post_save, sender=User)
 def save_profile(sender, instance, **kwargs):
     instance.profile.save()
-    print("Profile Auto Saved!")
-
-
-@receiver(post_save, sender=Post)
-def post_saved(sender, instance, created, **kwargs):
-    if created:
-        print("New Post Created:", instance.title)
-    else:
-        print("Post Updated:", instance.title)
+    print("✅ Profile Auto Saved!")
