@@ -1,3 +1,6 @@
-from django.shortcuts import render
+from django.http import JsonResponse
+from .models import ChatMessage
 
-# Create your views here.
+def messages_list(request):
+    data = list(ChatMessage.objects.values())
+    return JsonResponse({"messages": data})
