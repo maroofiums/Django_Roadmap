@@ -1,21 +1,13 @@
-from django.test import TestCase
-from django.urls import reverse, path
-from chatapp.models import ChatMessage
-from chatapp.views import messages_list
+import pytest
+from django.urls import reverse
+from myapp.models import Post
 
-urlpatterns = [
-    path("messages/", messages_list, name="messages"),
-]
+@pytest.mark.django_db
+def test_home_page(client):
+    Post.objects.create(title="Test Post", content="Hello")
 
-class MessagesViewTest(TestCase):
+    url = reverse("home")
+    resp = client.get(url)
 
-    def test_messages_empty_list(self):
-        response = self.client.get("/messages/")
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), {"messages": []})
-
-    def test_messages_with_data(self):
-        ChatMessage.objects.create(username="ali", message="Hello!")
-        res = self.client.get("/messages/")
-        self.assertEqual(res.status_code, 200)
-        self.assertEqual(len(res.json()["messages"]), 1)
+    assert resp.status_code == 200
+    assert b"Test Post" in resp.content

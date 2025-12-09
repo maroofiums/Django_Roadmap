@@ -1,6 +1,7 @@
-from django.http import JsonResponse
-from .models import ChatMessage
+from django.shortcuts import render
+from .models import Message
 
-def messages_list(request):
-    data = list(ChatMessage.objects.values())
-    return JsonResponse({"messages": data})
+def chat_home(request):
+    messages = Message.objects.order_by("-timestamp")[:25]  # latest 25
+    messages = reversed(messages)  # old → new order
+    return render(request, "chat_home.html", {"messages": messages})

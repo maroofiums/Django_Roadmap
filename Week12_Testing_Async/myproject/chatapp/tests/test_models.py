@@ -1,14 +1,16 @@
-from django.test import TestCase
-from chatapp.models import ChatMessage
+import pytest
+from django.contrib.auth.models import User
+from .models import Profile, Post
 
-class ChatMessageModelTest(TestCase):
+@pytest.mark.django_db
+def test_profile_is_created():
+    user = User.objects.create_user(username="maroof", password="1234")
+    profile = Profile.objects.get(user=user)
 
-    def test_create_message(self):
-        msg = ChatMessage.objects.create(
-            username="maroof",
-            message="Hello testing world!"
-        )
+    assert profile.user.username == "maroof"
+    assert profile.bio == ""
 
-        self.assertEqual(msg.username, "maroof")
-        self.assertEqual(ChatMessage.objects.count(), 1)
-        self.assertTrue(msg.timestamp)
+@pytest.mark.django_db
+def test_post_str():
+    post = Post.objects.create(title="Hello", content="World")
+    assert str(post) == "Hello"
