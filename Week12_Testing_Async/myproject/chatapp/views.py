@@ -1,15 +1,10 @@
-from django.shortcuts import render
-from .models import Room, Message
+from django.shortcuts import render, get_object_or_404
+from .models import Room
 
-def room_list(request):
+def home(request):
     rooms = Room.objects.all()
-    return render(request, "room_list.html", {"rooms": rooms})
+    return render(request, "chat/home.html", {"rooms": rooms})
 
-
-def room(request, room_name):
-    room_obj = Room.objects.get(name=room_name)
-    messages = room_obj.messages.order_by("timestamp")
-    return render(request, "chat_room.html", {
-        "room_name": room_name,
-        "messages": messages
-    })
+def room_detail(request, room_name):
+    room = get_object_or_404(Room, name=room_name)
+    return render(request, "chat/room.html", {"room": room})
