@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat Room</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        #messages { border: 1px solid #ddd; height: 300px; padding: 10px; overflow-y: scroll; }
+        input { width: 80%; padding: 10px; }
+        button { padding: 10px; }
+    </style>
+</head>
+<body>
+
+<h2>🌐 Global Chat Room</h2>
+
+<div id="messages"></div>
+
+<br>
+<input type="text" id="messageInput" placeholder="Type your message...">
+<button onclick="sendMessage()">Send</button>
+
+<script>
+    const socket = new WebSocket("ws://" + window.location.host + "/ws/chat/");
+
+    socket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        const messages = document.getElementById("messages");
+
+        const msg = document.createElement("p");
+        msg.textContent = data.message;
+
+        messages.appendChild(msg);
+    };
+
+    function sendMessage() {
+        const input = document.getElementById("messageInput");
+        const message = input.value;
+
+        socket.send(JSON.stringify({
+            "message": message
+        }));
+
+        input.value = "";
+    }
+</script>
+
+</body>
+</html>
