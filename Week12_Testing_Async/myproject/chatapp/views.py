@@ -1,5 +1,15 @@
+from django.shortcuts import render
+from .models import Room, Message
 
-from django.views.generic import TemplateView
+def room_list(request):
+    rooms = Room.objects.all()
+    return render(request, "room_list.html", {"rooms": rooms})
 
-class RoomView(TemplateView):
-    template_name = "chat/room.html"
+
+def room(request, room_name):
+    room_obj = Room.objects.get(name=room_name)
+    messages = room_obj.messages.order_by("timestamp")
+    return render(request, "chat_room.html", {
+        "room_name": room_name,
+        "messages": messages
+    })
