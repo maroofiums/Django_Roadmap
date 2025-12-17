@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Posts</title>
+</head>
+<body>
+
+<h2>All Posts</h2>
+
+{% load my_filters %}
+
+{% for post in posts %}
+    <h3>{{ post.title }}</h3>
+    <p>{{ post.content|truncate_chars:50 }}</p>
+    <hr>
+{% endfor %}
+
+</body>
+</html>
