@@ -19,22 +19,9 @@
 #     return render(request, 'upload.html', {'form': form})
 
 # blog/views.py
-from django.shortcuts import render, HttpResponse
-from django.core.mail import send_mail
+from django.shortcuts import render
 from .models import Document
-from django.conf import settings
 
 def post_list(request):
     posts = Document.objects.all()
     return render(request, 'post_list.html', {'posts': posts})
-
-def send_test_email(request):
-    send_mail(
-        subject='Django Test Email',
-        message='This is a test email sent from Django.',
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        recipient_list=['user@example.com'],
-        fail_silently=False,
-    )
-
-    return HttpResponse("Email sent! Check your console.")
