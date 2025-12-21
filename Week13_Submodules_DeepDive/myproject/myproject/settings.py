@@ -24,13 +24,13 @@ USE_I18N = True
 
 
 
-LOCALE_PATHS = [
-    BASE_DIR / 'locale',
-]
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
