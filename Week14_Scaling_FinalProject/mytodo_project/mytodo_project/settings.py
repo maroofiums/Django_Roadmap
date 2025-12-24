@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "rest_framework",
     "mytodo",
+    "channels",
     
 ]
 
@@ -71,7 +72,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'mytodo_project.wsgi.application'
 
-
+ASGI_APPLICATION = 'mytodo_project.asgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
