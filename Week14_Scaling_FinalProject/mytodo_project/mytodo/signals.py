@@ -1,10 +1,8 @@
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
+from django.core.cache import cache
 from .models import Post
 
-@receiver(post_save, sender=Post)
-def post_created_handler(sender, instance, created, **kwargs):
-    if created:
-        print(f'New post created: {instance.title}')
-        
-        
+@receiver([post_save, post_delete], sender=Post)
+def clear_todo_cache(sender, instance, **kwargs):
+    cache.delete("all_todos")

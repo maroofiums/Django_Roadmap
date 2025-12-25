@@ -1,3 +1,4 @@
+from django.core.cache import cache
 from faker import Faker
 from .models import Post
 
@@ -18,4 +19,10 @@ def clear_posts():
     
     
         
-        
+
+def get_all_todos():
+    todos = cache.get("all_todos")
+    if not todos:
+        todos = list(Post.objects.all())
+        cache.set("all_todos", todos, timeout=300)  
+    return todos
