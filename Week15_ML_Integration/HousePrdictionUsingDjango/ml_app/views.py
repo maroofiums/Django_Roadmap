@@ -1,3 +1,9 @@
 from django.shortcuts import render
 
-# Create your views here.
+from HousePrdictionUsingDjango.loaders import load_model
+
+def predict_price(area, rooms):
+    model = load_model()
+    prediction = model.predict([[area, rooms]])
+    return prediction[0]
+
