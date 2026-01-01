@@ -1,16 +1,55 @@
-# ml_app/views.py
+from django.shortcuts import render
+from .forms import HousePredictionForm
+from HousePrdictionUsingDjango.loaders import load_model
 
-from django.http import JsonResponse
-from HousePrdictionUsingDjango.loaders import model
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .serializers import HousePredictionSerializer
 
-def predict_price(request):
-    area = int(request.GET.get("area", 1000))
-    rooms = int(request.GET.get("rooms", 2))
+model = load_model()
 
-    prediction = model.predict([[area, rooms]])[0]
+# HTML FORM VIEW
+def house_prediction_view(request):
+    prediction = None
 
-    return JsonResponse({
-        "area": area,
-        "rooms": rooms,
-        "predicted_price": round(prediction, 2)
-    })
+    if request.method == "POST":
+        form = HousePredictionForm(request.POST)
+        if form.is_valid():
+            area = form.cleaned_data["area"]
+            bedrooms = form.cleaned_data["bedrooms"]
+
+            prediction = model.predict([[area, bedrooms]])[0]
+    else:
+        form = HousePredictionForm()
+
+    return render(
+        request,
+        "ml_app/house_prediction.html",
+        {
+            "form": form,
+            "prediction": round(prediction, 2) if prediction else None
+        }
+    )
+
+# API VIEW
+@api_view(["GET", "POST"])
+def house_prediction_api_view(request):
+    if request.method == "GET":
+        return Response({
+            "message": "Use POST with area & bedrooms"
+        })
+    serializer = HousePredictionSerializer(data=request.data)
+
+    if serializer.is_valid():
+        area = serializer.validated_data["area"]
+        bedrooms = serializer.validated_data["bedrooms"]
+
+        prediction = model.predict([[area, bedrooms]])[0]
+
+        return Response({
+            "area": area,
+            "bedrooms": bedrooms,
+            "predicted_price": round(prediction, 2)
+        })
+
+    return Response(serializer.errors, status=400)
