@@ -1,8 +1,7 @@
 from django.shortcuts import render
 from .forms import HousePredictionForm
 from HousePrdictionUsingDjango.loaders import load_model
-
-from rest_framework.decorators import api_view
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import HousePredictionSerializer
 
@@ -32,24 +31,17 @@ def house_prediction_view(request):
     )
 
 # API VIEW
-@api_view(["GET", "POST"])
-def house_prediction_api_view(request):
-    if request.method == "GET":
-        return Response({
-            "message": "Use POST with area & bedrooms"
-        })
-    serializer = HousePredictionSerializer(data=request.data)
 
-    if serializer.is_valid():
-        area = serializer.validated_data["area"]
-        bedrooms = serializer.validated_data["bedrooms"]
+class HousePredictionAPI(APIView):
+    def post(self, request):
+        serializer = HousePredictionSerializer(data=request.data)
+        if serializer.is_valid():
+            area = serializer.validated_data["area"]
+            bedrooms = serializer.validated_data["bedrooms"]
 
-        prediction = model.predict([[area, bedrooms]])[0]
+            prediction = model.predict([[area, bedrooms]])[0]
 
-        return Response({
-            "area": area,
-            "bedrooms": bedrooms,
-            "predicted_price": round(prediction, 2)
-        })
-
-    return Response(serializer.errors, status=400)
+            return Response({
+                "prediction": round(prediction, 2)
+            })
+        return Response(serializer.errors, status=400)
