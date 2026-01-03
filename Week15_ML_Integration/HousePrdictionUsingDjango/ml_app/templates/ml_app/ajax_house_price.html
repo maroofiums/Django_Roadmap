@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form id="prediction-form">
+    {% csrf_token %}
+
+    <input type="number" id="area" placeholder="Area" required>
+    <input type="number" id="bedrooms" placeholder="Bedrooms" required>
+
+    <button type="submit">Predict</button>
+</form>
+
+<h3 id="result"></h3>
+<script>
+document.getElementById("prediction-form").addEventListener("submit", function(e) {
+    e.preventDefault(); // page reload stop
+
+    const area = document.getElementById("area").value;
+    const bedrooms = document.getElementById("bedrooms").value;
+
+    fetch("/api/predict/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": "{{ csrf_token }}"
+        },
+        body: JSON.stringify({
+            area: area,
+            bedrooms: bedrooms
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById("result").innerText =
+            "Predicted Price: " + data.predicted_price;
+    })
+    .catch(error => console.log(error));
+});
+</script>
+
+</body>
+</html>

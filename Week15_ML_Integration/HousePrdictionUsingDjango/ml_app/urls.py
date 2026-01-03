@@ -1,7 +1,7 @@
 from django.urls import path
-from .views import house_prediction_view, house_prediction_api_view
+from .views import house_prediction_view, HousePredictionAPI
 
 urlpatterns = [
-    path("", house_prediction_view, name="predict-form"),
-    path("api/predict/", house_prediction_api_view, name="predict-api"),
+    path("predict/", house_prediction_view, name="predict-form"),
+    path("api/predict/", HousePredictionAPI.as_view(), name="predict-api"),
 ]
