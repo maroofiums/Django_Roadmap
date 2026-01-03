@@ -7,8 +7,6 @@ from .serializers import HousePredictionSerializer
 
 model = load_model()
 
-# HTML FORM VIEW
-def house_prediction_view(request):
     prediction = None
 
     if request.method == "POST":
@@ -30,7 +28,7 @@ def house_prediction_view(request):
         }
     )
 
-# API VIEW
+# API CLASS-BASE VIEW
 
 class HousePredictionAPI(APIView):
     def post(self, request):
