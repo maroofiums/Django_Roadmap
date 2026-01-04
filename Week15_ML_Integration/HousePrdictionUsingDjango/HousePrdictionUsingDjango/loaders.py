@@ -1,10 +1,11 @@
-import joblib
 import os
-
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-MODEL_PATH = os.path.join(BASE_DIR, "ml_models", "house_price.pkl")
-
-model = joblib.load(MODEL_PATH)
+import joblib
+from django.conf import settings
 
 def load_model():
-    return model
+    model_path = os.path.join(
+        settings.BASE_DIR,
+        "ml_models",
+        "house_price.pkl"
+    )
+    return joblib.load(model_path)
